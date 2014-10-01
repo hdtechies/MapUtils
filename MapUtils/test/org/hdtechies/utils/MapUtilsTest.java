@@ -22,7 +22,7 @@ public class MapUtilsTest {
         Map<String, Object> map = new HashMap<>();
 
         map.put("name", "Hardik");
-        map.put("salary", 10000D);
+        map.put("salary", 20000D);
         map.put("dob", "10-10-1990");
         map.put("married", false);
 
