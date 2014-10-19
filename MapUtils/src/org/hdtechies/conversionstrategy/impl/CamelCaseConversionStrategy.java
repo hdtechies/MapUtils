@@ -11,12 +11,15 @@ import org.hdtechies.conversionstrategy.KeyNameConversionStartegy;
  *
  * @author HaRdik
  */
-public class FirstLetterCapitalCaseConversionStartegy implements KeyNameConversionStartegy {
+public class CamelCaseConversionStrategy implements KeyNameConversionStartegy {
 
     @Override
     public String convert(String key) {
-        Character c = key.charAt(0);
-        return c.toString().toUpperCase() + key.toLowerCase().substring(1);
+        return removeFirstCapitalLetter(key);
     }
 
+    private static String removeFirstCapitalLetter(String s) {
+        Character c = s.charAt(0);
+        return c.toString().toLowerCase() + s.substring(1);
+    }
 }

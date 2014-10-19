@@ -6,8 +6,11 @@
 package org.hdtechies.utils;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
-import org.hdtechies.conversionstrategy.ConversionStartegy;
+import org.hdtechies.conversionstrategy.KeyNameConversionStartegy;
+import org.hdtechies.conversionstrategy.impl.CamelCaseConversionStrategy;
 
 /**
  *
@@ -17,12 +20,12 @@ public class MapUtils {
 
     private final static String SET = "set";
 
-    public static <T> T convertMapToPojo(Map<String, Object> map, Class<T> t) throws Exception {
+    private static <T> T convertMapToPojoPrivate(Map<String, Object> map, Class<T> t, KeyNameConversionStartegy keyNameConversionStartegy) throws Exception {
         T x = t.newInstance();
         Method[] methods = x.getClass().getMethods();
         for (Method method : methods) {
             if (method.getName().startsWith(SET)) {
-                Object value = map.get(removeFirstCapitalLetter(method.getName().substring(SET.length())));
+                Object value = map.get(keyNameConversionStartegy.convert(method.getName().substring(SET.length())));
                 if (value != null) {
                     method.invoke(x, value);
                 }
@@ -31,7 +34,11 @@ public class MapUtils {
         return x;
     }
 
-    public static <T> T convertMapToPojo(Map<String, Object> map, Class<T> t, ConversionStartegy conversionStartegy) throws Exception {
+    public static <T> T convertMapToPojo(Map<String, Object> map, Class<T> t) throws Exception {
+        return convertMapToPojoPrivate(map, t, new CamelCaseConversionStrategy());
+    }
+
+    public static <T> T convertMapToPojo(Map<String, Object> map, Class<T> t, KeyNameConversionStartegy conversionStartegy) throws Exception {
         T x = t.newInstance();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             String newKey = conversionStartegy.convert(entry.getKey());
@@ -51,10 +58,4 @@ public class MapUtils {
         }
         return x;
     }
-
-    private static String removeFirstCapitalLetter(String s) {
-        Character c = s.charAt(0);
-        return c.toString().toLowerCase() + s.substring(1);
-    }
-
 }

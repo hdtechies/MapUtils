@@ -7,6 +7,7 @@ package org.hdtechies.utils;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.hdtechies.conversionstrategy.impl.FirstLetterCapitalCaseConversionStartegy;
 import org.hdtechies.model.Person;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -27,8 +28,18 @@ public class MapUtilsTest {
         map.put("married", false);
 
         Person person = MapUtils.convertMapToPojo(map, Person.class);
+        System.out.println(" person " + person);
 
-        assertNotNull(person);
+        Map<String, Object> map1 = new HashMap<>();
+
+        map1.put("NAME", "Hardik");
+        map1.put("SALARY", 10000D);
+        map1.put("DOB", "10-10-1990");
+        map1.put("MARRIED", false);
+
+        Person person1 = MapUtils.convertMapToPojo(map1, Person.class, new FirstLetterCapitalCaseConversionStartegy());
+        System.out.println(" person1 " + person1);
+        assertNotNull(person1);
     }
 
 }
